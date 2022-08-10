@@ -11,14 +11,14 @@
  */
 int main(int argc, char **argv, char **envp)
 {
-	char input_str[BUFF_SIZE], *args[MAX_ARGS], *line;
+	char input_str[BUFF_SIZE], *args[MAX_ARGS], *line = NULL;
 	size_t len = 0;
 	ssize_t read;
 
 	(void) argc;
 	(void) argv;
-
-	while (1)
+	init();
+	while (TRUE)
 	{
 		prompt();
 		read = getline(&line, &len, stdin);
@@ -27,21 +27,12 @@ int main(int argc, char **argv, char **envp)
 			free(line);
 			continue;
 		}
-		if (line[0] == '\0')
-		{
-			free(line);
-			continue;
-		}
 		if (line[0] == '\n')
-		{
-			free(line);
 			continue;
-		}
+
 		strcpy(input_str, line);
 		parse_str(input_str, args);
 		execute(args, envp);
-		free(line);
 	}
 	return (0);
 }
-

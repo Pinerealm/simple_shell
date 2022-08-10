@@ -1,6 +1,24 @@
 #include "simple_sh.h"
 
 /**
+ * init - initialize the shell mode
+ *
+ * Return: void
+ */
+void init(void)
+{
+	pid_t sh_pid = getpid();
+	pid_t parent_pid = getppid();
+
+	if (isatty(STDIN_FILENO) == 1)
+	{
+		printf("pid = [%d] $\n", sh_pid);
+		sleep(1);
+		printf("ppid = [%d] $\n", parent_pid);
+	}
+}
+
+/**
  * prompt - prints the prompt
  *
  * Return: void
@@ -37,8 +55,9 @@ void parse_str(char *input_str, char **args)
 	char *arg;
 	int i = 0;
 
+	destroy_args(args);
 	arg = strtok(input_str, " \n");
-	while (arg != NULL)
+	while (arg != NULL && i < MAX_ARGS)
 	{
 		args[i++] = arg;
 		arg = strtok(NULL, " \n");
@@ -55,7 +74,7 @@ void parse_str(char *input_str, char **args)
 void execute(char **args, char **envp)
 {
 	pid_t pid;
-	int status;
+	int status = 0;
 
 	if (args[0] == NULL)
 		return;
@@ -85,10 +104,6 @@ void execute(char **args, char **envp)
 			execve(args[0], args, envp);
 			perror("Error");
 		}
-		else
-		{
-			wait(&status);
-		}
+		wait(&status);
 	}
 }
-

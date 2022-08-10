@@ -11,6 +11,7 @@
 
 #define BUFF_SIZE 1024 /**< buffer size */
 #define MAX_ARGS 64 /**< maximum number of arguments */
+#define TRUE 1
 
 /* FUNCTION PROTOTYPES */
 void prompt(void);
@@ -18,6 +19,8 @@ void execute(char **args, char **envp);
 void print_env(char **env);
 void parse_str(char *input_str, char **args);
 
+void init(void);
+void destroy_args(char **args);
+
 
 #endif /* SIMPLE_SH_H */
-

@@ -15,11 +15,11 @@
 
 /* FUNCTION PROTOTYPES */
 void prompt(void);
-void execute(char **args, char **envp);
+void execute(char **args, char **envp, char *line, char **argv);
 void print_env(char **env);
 void parse_str(char *input_str, char **args);
 
-void init(void);
+void init(int *status);
 void destroy_args(char **args);
 
 

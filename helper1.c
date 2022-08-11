@@ -2,19 +2,20 @@
 
 /**
  * init - initialize the shell mode
+ * @status: 1 if interactive, 0 if not
  *
  * Return: void
  */
-void init(void)
+void init(int *status)
 {
-	pid_t sh_pid = getpid();
-	pid_t parent_pid = getppid();
-
 	if (isatty(STDIN_FILENO) == 1)
 	{
-		printf("pid = [%d] $\n", sh_pid);
-		sleep(1);
-		printf("ppid = [%d] $\n", parent_pid);
+		*status = 1;
+		printf("simple_sh:$ ");
+	}
+	else
+	{
+		*status = 0;
 	}
 }
 
@@ -68,10 +69,12 @@ void parse_str(char *input_str, char **args)
  * execute - executes a command
  * @args: the line to be executed
  * @envp: the environment variables
+ * @line: pointer to the getline line
+ * @argv: the arguments to the shell
  *
  * Return: void
  */
-void execute(char **args, char **envp)
+void execute(char **args, char **envp, char *line, char **argv)
 {
 	pid_t pid;
 	int status = 0;
@@ -80,6 +83,7 @@ void execute(char **args, char **envp)
 		return;
 	if (strcmp(args[0], "exit") == 0)
 	{
+		free(line);
 		exit(0);
 	}
 	else if (strcmp(args[0], "env") == 0)
@@ -102,7 +106,7 @@ void execute(char **args, char **envp)
 		if (pid == 0)
 		{
 			execve(args[0], args, envp);
-			perror("Error");
+			perror(argv[0]);
 		}
 		wait(&status);
 	}

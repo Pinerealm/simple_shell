@@ -2,7 +2,7 @@
 
 /**
  * init - initialize the shell mode
- * @status: 1 if interactive, 0 if not
+ * @status: status of the shell
  *
  * Return: void
  */
@@ -56,7 +56,8 @@ void parse_str(char *input_str, char **args)
 	char *arg;
 	int i = 0;
 
-	destroy_args(args);
+	if (args[0] != NULL)
+		destroy_args(args);
 	arg = strtok(input_str, " \n");
 	while (arg != NULL && i < MAX_ARGS)
 	{
@@ -84,7 +85,7 @@ void execute(char **args, char **envp, char *line, char **argv)
 	if (strcmp(args[0], "exit") == 0)
 	{
 		free(line);
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 	else if (strcmp(args[0], "env") == 0)
 	{
@@ -105,8 +106,11 @@ void execute(char **args, char **envp, char *line, char **argv)
 		pid = fork();
 		if (pid == 0)
 		{
-			execve(args[0], args, envp);
-			perror(argv[0]);
+			if (execve(args[0], args, envp) == -1)
+			{
+				perror(argv[0]);
+				exit(EXIT_FAILURE);
+			}
 		}
 		wait(&status);
 	}

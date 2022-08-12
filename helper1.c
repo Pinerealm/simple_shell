@@ -83,7 +83,7 @@ void execute(char **args, char **envp)
 		if (pid == 0)
 		{
 			execve(args[0], args, envp);
-			perror("Error");
+			perror("./shell");
 		}
 		else
 		{

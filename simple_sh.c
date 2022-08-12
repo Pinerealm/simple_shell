@@ -40,7 +40,7 @@ int main(int argc, char **argv, char **envp)
 		strcpy(input_str, line);
 		parse_str(input_str, args);
 		execute(args, envp);
-		free(line);
+		// free(line);
 	}
 	return (0);
 }

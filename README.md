@@ -1,6 +1,6 @@
 # Simple shell
 
-*Simple Shell* is a clone of the Bash shell as part of the team project in *alx sofware engineering course*
+*Simple Shell* is a clone of the Bash shell as part of the team project for *alx sofware engineering course*
 
 ---
 ## Setup  
@@ -23,5 +23,5 @@ While at the root of your cloned version of this repo, Type `./shell` on your te
 ---
 ## Authors  
 
-Seyi Salami <>  
-Nasrullahi Olamide <nasrullahiolamide3011@gmail.com>
+[Seyi Salami](https://github.com/Pinerealm)
+[Nasrullahi Olamide](https://github.com/nasrullahiolamide)

@@ -5,7 +5,7 @@
 ---
 ## Setup  
 
- `$ git clone https://github.com/Pinerealm/simple_shell.git`__ 
+ `$ git clone https://github.com/Pinerealm/simple_shell.git` <br />
  `$ cd simple_shell`
 
 

@@ -22,5 +22,5 @@ While at the root of your cloned version of this repo, Type `./run_shell.sh` on 
 ---
 ## Authors  
 
-[Seyi Salami](https://github.com/Pinerealm)__
+[Seyi Salami](https://github.com/Pinerealm)<br />
 [Nasrullahi Olamide](https://github.com/nasrullahiolamide)

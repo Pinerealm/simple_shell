@@ -1,17 +1,17 @@
 #include "simple_sh.h"
 
 /**
- * init - initialize the shell mode
- * @status: status of the shell
+ * is_interactive - checks the shell mode
+ * @status: shell status; 0 if interactive, 1 if not
  *
  * Return: void
  */
-void init(int *status)
+void is_interactive(int *status)
 {
 	if (isatty(STDIN_FILENO) == 1)
 	{
 		*status = 1;
-		printf("simple_sh:$ ");
+		write(STDOUT_FILENO, "simple_sh:$ ", 13);
 	}
 	else
 	{
@@ -57,7 +57,7 @@ void parse_str(char *input_str, char **args)
 	int i = 0;
 
 	if (args[0] != NULL)
-		destroy_args(args);
+		init_arr(args, MAX_ARGS);
 	arg = strtok(input_str, " \n");
 	while (arg != NULL && i < MAX_ARGS)
 	{
@@ -75,9 +75,9 @@ void parse_str(char *input_str, char **args)
  *
  * Return: void
  */
-void execute(char **args, char **envp, char *line, char **argv)
+void execute(char **args, char *line, char **argv, char **arr)
 {
-	pid_t pid;
+	pid_t child_pid;
 	int status = 0;
 
 	if (args[0] == NULL)
@@ -89,7 +89,7 @@ void execute(char **args, char **envp, char *line, char **argv)
 	}
 	else if (strcmp(args[0], "env") == 0)
 	{
-		print_env(envp);
+		print_env(__environ);
 	}
 	else if (strcmp(args[0], "cd") == 0)
 	{
@@ -103,15 +103,25 @@ void execute(char **args, char **envp, char *line, char **argv)
 	}
 	else
 	{
-		pid = fork();
-		if (pid == 0)
+		child_pid = fork();
+		if (child_pid == -1)
 		{
-			if (execve(args[0], args, envp) == -1)
+			perror(argv[0]);
+			exit(EXIT_FAILURE);
+		}
+		if (child_pid == 0)
+		{
+			if (execve(args[0], args, __environ) == -1)
 			{
 				perror(argv[0]);
+				free(line);
+				free_line_arr(arr);
 				exit(EXIT_FAILURE);
 			}
 		}
-		wait(&status);
+		else
+		{
+			wait(&status);
+		}
 	}
 }

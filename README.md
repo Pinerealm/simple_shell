@@ -5,9 +5,8 @@
 ---
 ## Setup  
 
- `$ git clone https://github.com/Pinerealm/simple_shell.git`  
+ `$ git clone https://github.com/Pinerealm/simple_shell.git`__ 
  `$ cd simple_shell`
- `$ gcc *.c -o shell`
 
 
 ---
@@ -18,10 +17,10 @@
 ---
 ## Usage  
 
-While at the root of your cloned version of this repo, Type `./shell` on your terminal. This will enable you to run *simple shell* in interactive mode. To quit, type `exit` or Hit `CTRL-D`.
+While at the root of your cloned version of this repo, Type `./run_shell.sh` on your terminal. This will enable you to run *simple shell* in interactive mode. To quit, type `exit` or Hit `CTRL-c`.
 
 ---
 ## Authors  
 
-[Seyi Salami](https://github.com/Pinerealm)
+[Seyi Salami](https://github.com/Pinerealm)__
 [Nasrullahi Olamide](https://github.com/nasrullahiolamide)

@@ -43,11 +43,21 @@ void print_env(char **env)
  */
 void parse_str(char *input_str, char **args)
 {
-	char *arg;
-	int i = 0;
+	char *arg, tmp_char;
+	int i = 0, j, k;
 
-	if (args[0] != NULL)
+	if (args[0])
 		init_arr(args, MAX_ARGS);
+	for (j = 0, k = 0; input_str[j]; j++)
+	{
+		if (input_str[j] != ' ' && input_str[j] != '\t')
+		{
+			tmp_char = input_str[j];
+			input_str[k++] = tmp_char;
+		}
+	}
+	input_str[k] = '\0';
+
 	arg = strtok(input_str, " \n");
 	while (arg != NULL && i < MAX_ARGS)
 	{
@@ -125,3 +135,4 @@ void execute(char **args, char **argv)
 			wait(&status);
 	}
 }
+

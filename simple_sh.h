@@ -11,9 +11,9 @@
 #include <fcntl.h>
 
 #define MAX_INPUT 1024
-#define MAX_LINES 10
 #define MAX_ARGS 10 /**< maximum number of arguments */
 #define TRUE 1
+#define INTERACTIVE 1 /**< shell is interactive */
 
 /**
  * struct builtin - builtin commands
@@ -54,15 +54,14 @@ typedef struct path
 
 /* FUNCTION PROTOTYPES */
 void prompt(void);
-void execute(char **args, char *line, char **argv, char **arr);
+void execute(char **args, char **argv);
 void print_env(char **env);
 void parse_str(char *input_str, char **args);
 
 void is_interactive(int *status);
-char *_getline(char **line, size_t *len);
+ssize_t get_input(char *input_line, char **argv);
 void init_arr(char **args, int size);
-void free_line_arr(char **array);
-
+int handle_builtins(char **args);
 
 /* string functions */
 char *_strncpy(char *dest, char *src, int n);

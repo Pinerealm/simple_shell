@@ -20,16 +20,6 @@ void is_interactive(int *status)
 }
 
 /**
- * prompt - prints the prompt
- *
- * Return: void
- */
-void prompt(void)
-{
-	printf("simple_sh:$ ");
-}
-
-/**
  * print_env - prints the environment variables
  * @env: array of environment variables
  *
@@ -67,29 +57,21 @@ void parse_str(char *input_str, char **args)
 }
 
 /**
- * execute - executes a command
- * @args: the line to be executed
- * @envp: the environment variables
- * @line: pointer to the getline line
- * @argv: the arguments to the shell
+ * handle_builtins - handles builtin commands
+ * @args: array of parsed arguments
  *
- * Return: void
+ * Return: 0 on success, 1 on failure
  */
-void execute(char **args, char *line, char **argv, char **arr)
+int handle_builtins(char **args)
 {
-	pid_t child_pid;
-	int status = 0;
-
-	if (args[0] == NULL)
-		return;
 	if (strcmp(args[0], "exit") == 0)
 	{
-		free(line);
 		exit(EXIT_SUCCESS);
 	}
 	else if (strcmp(args[0], "env") == 0)
 	{
 		print_env(__environ);
+		return (0);
 	}
 	else if (strcmp(args[0], "cd") == 0)
 	{
@@ -100,8 +82,30 @@ void execute(char **args, char *line, char **argv, char **arr)
 			path = getenv("HOME");
 		}
 		chdir(path);
+		return (0);
 	}
 	else
+	{
+		return (1);
+	}
+}
+
+/**
+ * execute - executes a command
+ *
+ * @args: the parsed arguments
+ * @argv: the command line arguments
+ *
+ * Return: void
+ */
+void execute(char **args, char **argv)
+{
+	pid_t child_pid;
+	int status = 0;
+
+	if (args[0] == NULL)
+		return;
+	if (handle_builtins(args) == 1)
 	{
 		child_pid = fork();
 		if (child_pid == -1)
@@ -114,14 +118,10 @@ void execute(char **args, char *line, char **argv, char **arr)
 			if (execve(args[0], args, __environ) == -1)
 			{
 				perror(argv[0]);
-				free(line);
-				free_line_arr(arr);
 				exit(EXIT_FAILURE);
 			}
 		}
 		else
-		{
 			wait(&status);
-		}
 	}
 }

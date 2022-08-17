@@ -37,33 +37,6 @@ char *_strncpy(char *dest, char *src, int n)
 }
 
 /**
- * _getline - gets a line from stdin
- *
- * @line: pointer to the line to be filled
- * @len: pointer to the length of the line
- *
- * Return: pointer to the line on success, NULL on failure
- */
-char *_getline(char **line, size_t *len)
-{
-	char *line_str = NULL, *prompt = "simple_sh:$ ";
-	ssize_t read, p_len = 13;
-
-	write(STDIN_FILENO, prompt, p_len);
-	read = getline(line, len, stdin);
-	if (read == -1 || *line[0] == '\n')
-		return (line_str);
-
-	line_str = malloc(sizeof(char) * read + 1);
-	if (line_str == NULL)
-		return (line_str);
-
-	_strncpy(line_str, *line, read - 1);
-	free(*line);
-	return (line_str);
-}
-
-/**
  * _strdup - duplicates a string
  * @str: string to be duplicated
  *
@@ -85,18 +58,4 @@ char *_strdup(char *str)
 	dup[len] = '\0';
 
 	return (dup);
-}
-
-/**
- * free_line_arr - frees the array of arguments
- * @array: array of arguments
- *
- * Return: void
- */
-void free_line_arr(char **array)
-{
-	int i;
-
-	for (i = 0; array[i] != NULL; i++)
-		free(array[i]);
 }

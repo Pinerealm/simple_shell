@@ -11,7 +11,7 @@
 #include <fcntl.h>
 
 #define MAX_INPUT 1024
-#define MAX_ARGS 10 /**< maximum number of arguments */
+#define MAX_ARGS 20 /**< maximum number of arguments */
 #define TRUE 1
 #define INTERACTIVE 1 /**< shell is interactive */
 
@@ -67,6 +67,6 @@ int handle_builtins(char **args);
 char *_strncpy(char *dest, char *src, int n);
 char *_strdup(char *str);
 char *_strcpy(char *dest, char *src);
-
+void trim(char *str);
 
 #endif /* SIMPLE_SH_H */

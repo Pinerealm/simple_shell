@@ -59,3 +59,23 @@ char *_strdup(char *str)
 
 	return (dup);
 }
+
+/**
+ * trim - removes leading and trailing whitespace
+ * @str: string to be trimmed
+ *
+ * Return: void
+ */
+void trim(char *str)
+{
+	int i, j;
+
+	for (i = 0; str[i] == ' ' || str[i] == '\t'; i++)
+		;
+	for (j = 0; str[j] != '\0'; j++)
+		str[j] = str[j + i];
+	str[j] = '\0';
+
+	for (j = j - 1; j >= 0 && (str[j] == ' ' || str[j] == '\t'); j--)
+		str[j] = '\0';
+}

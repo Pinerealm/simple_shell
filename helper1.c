@@ -36,33 +36,25 @@ void print_env(char **env)
 /**
  * parse_str - parses the input string
  *
- * @input_str: input string
+ * @input: input string
  * @args: array of parsed arguments
  *
  * Return: void
  */
-void parse_str(char *input_str, char **args)
+void parse_str(char *input, char **args)
 {
-	char *arg, tmp_char;
-	int i = 0, j, k;
+	char *arg;
+	int i = 0;
 
 	if (args[0])
 		init_arr(args, MAX_ARGS);
-	for (j = 0, k = 0; input_str[j]; j++)
-	{
-		if (input_str[j] != ' ' && input_str[j] != '\t')
-		{
-			tmp_char = input_str[j];
-			input_str[k++] = tmp_char;
-		}
-	}
-	input_str[k] = '\0';
+	trim(input);
 
-	arg = strtok(input_str, " \n");
+	arg = strtok(input, " \n\t");
 	while (arg != NULL && i < MAX_ARGS)
 	{
 		args[i++] = arg;
-		arg = strtok(NULL, " \n");
+		arg = strtok(NULL, " \n\t");
 	}
 }
 
@@ -135,4 +127,3 @@ void execute(char **args, char **argv)
 			wait(&status);
 	}
 }
-

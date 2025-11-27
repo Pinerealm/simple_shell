@@ -1,3 +1,3 @@
 #!/bin/bash
-gcc *.c -o shell
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 "*.c" -o shell
 ./shell

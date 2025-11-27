@@ -20,6 +20,17 @@ void _eputs(char *str);
 void print_number(int n);
 void print_error(char *name, char *cmd, int count);
 
+/* string_utils.c */
+char *_strcpy(char *dest, char *src);
+char *_strcat(char *dest, char *src);
+char *_strdup(char *str);
+int _strcmp(char *s1, char *s2);
+int _strncmp(char *s1, char *s2, int n);
+
+/* path.c */
+char *_getenv(const char *name);
+char *get_path(char *cmd);
+
 /* execute.c */
 void execute_command(char **argv, char *name, int count);
 

@@ -1,26 +1,75 @@
-# Simple shell
+# Simple Shell
 
-*Simple Shell* is a clone of the Bash shell as part of the team project for *alx sofware engineering course*
+A simple UNIX command interpreter written in C as part of the ALX Software Engineering curriculum. This shell replicates the core functionality of the `sh` shell, including command execution, argument parsing, and PATH resolution.
 
----
-## Setup  
+## Features
 
- `$ git clone https://github.com/Pinerealm/simple_shell.git` <br />
- `$ cd simple_shell`
+- **Command Execution**: Executes commands found in the system's `PATH` or via absolute/relative paths.
+- **Argument Handling**: Supports commands with arguments (e.g., `ls -l /tmp`).
+- **Environment**: Inherits the environment from the parent process.
+- **Error Handling**: Displays error messages matching the `sh` format.
+- **Interactive & Non-Interactive Modes**: Works in a terminal or via pipes/scripts.
+- **Memory Management**: Clean memory usage with no leaks.
 
+## Installation
 
----
-## Technologies used  
+Clone the repository:
 
-- C Programming Language
+```bash
+git clone https://github.com/Pinerealm/simple_shell.git
+cd simple_shell
+```
 
----
-## Usage  
+## Compilation
 
-While at the root of your cloned version of this repo, Type `./run_shell.sh` on your terminal. This will enable you to run *simple shell* in interactive mode. To quit, type `exit` or Hit `CTRL-c`.
+Compile the shell using `gcc` with the following flags:
 
----
-## Authors  
+```bash
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o shell
+```
 
-[Seyi Salami](https://github.com/Pinerealm)<br />
-[Nasrullahi Olamide](https://github.com/nasrullahiolamide)
+## Usage
+
+### Interactive Mode
+
+Run the shell and type commands:
+
+```bash
+./shell
+($) ls -l
+total 40
+-rw-rw-r-- 1 user user  234 Nov 27 12:00 AUTHORS
+-rw-rw-r-- 1 user user 1234 Nov 27 12:00 execute.c
+...
+($) pwd
+/home/user/simple_shell
+($) exit
+```
+
+### Non-Interactive Mode
+
+Pipe commands into the shell:
+
+```bash
+echo "ls -l" | ./shell
+```
+
+## File Structure
+
+- **`main.c`**: Entry point. Handles the main loop, reading input, and parsing lines.
+- **`execute.c`**: Handles process creation (`fork`) and execution (`execve`).
+- **`path.c`**: Handles `PATH` environment variable searching and command resolution.
+- **`string_utils.c`**: Custom string manipulation functions (`_strcpy`, `_strcat`, `_strdup`, etc.).
+- **`utils.c`**: General utility functions (printing, error handling).
+- **`shell.h`**: Header file containing function prototypes and standard library includes.
+
+## Requirements
+
+- Operating System: Linux (Ubuntu 20.04 LTS recommended)
+- Compiler: GCC
+- Code Style: Betty style
+
+## Authors
+
+- [Seyi Salami](https://github.com/Pinerealm)
+- [Nasrullahi Olamide](https://github.com/nasrullahiolamide)

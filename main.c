@@ -59,7 +59,7 @@ int main(int ac, char **av)
 		if (isatty(STDIN_FILENO))
 			_puts("($) ");
 
-		nread = getline(&line, &len, stdin);
+		nread = _getline(&line, &len, STDIN_FILENO);
 		if (nread == -1)
 		{
 			if (isatty(STDIN_FILENO))

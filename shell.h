@@ -11,6 +11,8 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#define READ_BUF_SIZE 1024
+
 extern char **environ;
 
 /* utils.c */
@@ -33,6 +35,9 @@ char *get_path(char *cmd);
 
 /* builtins.c */
 void print_env(void);
+
+/* getline.c */
+ssize_t _getline(char **lineptr, size_t *n, int fd);
 
 /* execute.c */
 int execute_command(char **argv, char *name, int count);

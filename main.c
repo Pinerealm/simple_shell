@@ -60,6 +60,7 @@ int handle_builtins(char **argv, int *status, char *name, int count)
  * main - simple shell main loop
  * @ac: argument count
  * @av: argument vector
+ *
  * Return: 0 on success
  */
 int main(int ac, char **av)

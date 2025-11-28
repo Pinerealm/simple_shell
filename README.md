@@ -7,6 +7,8 @@ A simple UNIX command interpreter written in C as part of the ALX Software Engin
 - **Command Execution**: Executes commands found in the system's `PATH` or via absolute/relative paths.
 - **Argument Handling**: Supports commands with arguments (e.g., `ls -l /tmp`).
 - **Environment**: Inherits the environment from the parent process.
+- **Built-in Commands**: Supports `exit` (to exit the shell) and `env` (to print environment variables).
+- **Custom Implementation**: Uses custom implementations of `getline` and `strtok` to minimize standard library dependencies.
 - **Error Handling**: Displays error messages matching the `sh` format.
 - **Interactive & Non-Interactive Modes**: Works in a terminal or via pipes/scripts.
 - **Memory Management**: Clean memory usage with no leaks.
@@ -58,7 +60,10 @@ echo "ls -l" | ./shell
 
 - **`main.c`**: Entry point. Handles the main loop, reading input, and parsing lines.
 - **`execute.c`**: Handles process creation (`fork`) and execution (`execve`).
+- **`builtins.c`**: Implementation of built-in commands (`exit`, `env`).
 - **`path.c`**: Handles `PATH` environment variable searching and command resolution.
+- **`getline.c`**: Custom implementation of the `getline` function using a static buffer.
+- **`tokenizer.c`**: Custom implementation of `strtok` for splitting strings.
 - **`string_utils.c`**: Custom string manipulation functions (`_strcpy`, `_strcat`, `_strdup`, etc.).
 - **`utils.c`**: General utility functions (printing, error handling).
 - **`shell.h`**: Header file containing function prototypes and standard library includes.

@@ -4,6 +4,7 @@
  * _strcpy - copies a string
  * @dest: destination
  * @src: source
+ *
  * Return: pointer to dest
  */
 char *_strcpy(char *dest, char *src)
@@ -25,6 +26,7 @@ char *_strcpy(char *dest, char *src)
  * _strcat - concatenates two strings
  * @dest: destination
  * @src: source
+ *
  * Return: pointer to dest
  */
 char *_strcat(char *dest, char *src)
@@ -71,6 +73,7 @@ char *_strdup(char *str)
  * _strcmp - compares two strings
  * @s1: first string
  * @s2: second string
+ *
  * Return: difference
  */
 int _strcmp(char *s1, char *s2)
@@ -87,6 +90,7 @@ int _strcmp(char *s1, char *s2)
  * @s1: first string
  * @s2: second string
  * @n: number of bytes
+ *
  * Return: difference
  */
 int _strncmp(char *s1, char *s2, int n)

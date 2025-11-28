@@ -29,6 +29,7 @@ char *_getenv(const char *name)
  * build_full_path - builds full path for command
  * @dir: directory
  * @cmd: command
+ *
  * Return: full path
  */
 char *build_full_path(char *dir, char *cmd)

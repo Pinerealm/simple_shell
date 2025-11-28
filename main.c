@@ -20,6 +20,25 @@ void parse_line(char *line, char **argv)
 }
 
 /**
+ * handle_builtins - handles built-in commands
+ * @argv: argument vector
+ * @status: pointer to status variable
+ * Return: 1 if built-in executed, 0 otherwise
+ */
+int handle_builtins(char **argv, int *status)
+{
+	if (_strcmp(argv[0], "exit") == 0)
+		return (-1);
+	if (_strcmp(argv[0], "env") == 0)
+	{
+		print_env();
+		*status = 0;
+		return (1);
+	}
+	return (0);
+}
+
+/**
  * main - simple shell main loop
  * @ac: argument count
  * @av: argument vector
@@ -30,7 +49,7 @@ int main(int ac, char **av)
 	char *line = NULL, *argv[1024];
 	size_t len = 0;
 	ssize_t nread;
-	int count = 0, status = 0;
+	int count = 0, status = 0, builtin_ret;
 
 	(void)ac;
 
@@ -56,9 +75,11 @@ int main(int ac, char **av)
 
 		if (argv[0])
 		{
-			if (_strcmp(argv[0], "exit") == 0)
+			builtin_ret = handle_builtins(argv, &status);
+			if (builtin_ret == -1)
 				break;
-			status = execute_command(argv, av[0], count);
+			else if (builtin_ret == 0)
+				status = execute_command(argv, av[0], count);
 		}
 	}
 	free(line);

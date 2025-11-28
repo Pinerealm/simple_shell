@@ -31,6 +31,9 @@ int _strncmp(char *s1, char *s2, int n);
 char *_getenv(const char *name);
 char *get_path(char *cmd);
 
+/* builtins.c */
+void print_env(void);
+
 /* execute.c */
 int execute_command(char **argv, char *name, int count);
 

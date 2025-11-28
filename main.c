@@ -23,12 +23,30 @@ void parse_line(char *line, char **argv)
  * handle_builtins - handles built-in commands
  * @argv: argument vector
  * @status: pointer to status variable
+ * @name: program name
+ * @count: line count
+ *
  * Return: 1 if built-in executed, 0 otherwise
  */
-int handle_builtins(char **argv, int *status)
+int handle_builtins(char **argv, int *status, char *name, int count)
 {
+	int exit_val;
+
 	if (_strcmp(argv[0], "exit") == 0)
+	{
+		if (argv[1])
+		{
+			exit_val = _atoi(argv[1]);
+			if (exit_val == -1)
+			{
+				*status = 2;
+				print_exit_error(name, count, argv[1]);
+				return (1);
+			}
+			*status = exit_val;
+		}
 		return (-1);
+	}
 	if (_strcmp(argv[0], "env") == 0)
 	{
 		print_env();
@@ -75,7 +93,7 @@ int main(int ac, char **av)
 
 		if (argv[0])
 		{
-			builtin_ret = handle_builtins(argv, &status);
+			builtin_ret = handle_builtins(argv, &status, av[0], count);
 			if (builtin_ret == -1)
 				break;
 			else if (builtin_ret == 0)

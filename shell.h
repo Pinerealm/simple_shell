@@ -29,6 +29,9 @@ char *_strdup(char *str);
 int _strcmp(char *s1, char *s2);
 int _strncmp(char *s1, char *s2, int n);
 
+/* string_utils_2.c */
+int _atoi(char *s);
+
 /* tokenizer.c */
 char *_strtok(char *str, char *delim);
 
@@ -44,5 +47,16 @@ ssize_t _getline(char **lineptr, size_t *n, int fd);
 
 /* execute.c */
 int execute_command(char **argv, char *name, int count);
+
+/* utils.c */
+int _strlen(char *s);
+void _puts(char *str);
+void _eputs(char *str);
+void print_number(int n);
+void print_error(char *name, char *cmd, int count);
+
+/* utils_2.c */
+void print_exit_error(char *name, int count, char *arg);
+
 
 #endif /* SHELL_H */

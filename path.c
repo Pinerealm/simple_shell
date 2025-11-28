@@ -75,7 +75,7 @@ char *get_path(char *cmd)
 	path_copy = _strdup(path_env);
 	if (!path_copy)
 		return (NULL);
-	dir = strtok(path_copy, ":");
+	dir = _strtok(path_copy, ":");
 	while (dir)
 	{
 		full_path = build_full_path(dir, cmd);
@@ -90,7 +90,7 @@ char *get_path(char *cmd)
 			return (full_path);
 		}
 		free(full_path);
-		dir = strtok(NULL, ":");
+		dir = _strtok(NULL, ":");
 	}
 	free(path_copy);
 	return (NULL);

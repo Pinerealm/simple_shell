@@ -10,11 +10,11 @@ void parse_line(char *line, char **argv)
 	char *token;
 	int i = 0;
 
-	token = strtok(line, " \t\n");
+	token = _strtok(line, " \t\n");
 	while (token && i < 1023)
 	{
 		argv[i++] = token;
-		token = strtok(NULL, " \t\n");
+		token = _strtok(NULL, " \t\n");
 	}
 	argv[i] = NULL;
 }

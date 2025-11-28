@@ -55,7 +55,11 @@ int main(int ac, char **av)
 		parse_line(line, argv);
 
 		if (argv[0])
+		{
+			if (_strcmp(argv[0], "exit") == 0)
+				break;
 			status = execute_command(argv, av[0], count);
+		}
 	}
 	free(line);
 	return (status);

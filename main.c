@@ -30,7 +30,7 @@ int main(int ac, char **av)
 	char *line = NULL, *argv[1024];
 	size_t len = 0;
 	ssize_t nread;
-	int count = 0;
+	int count = 0, status = 0;
 
 	(void)ac;
 
@@ -46,7 +46,7 @@ int main(int ac, char **av)
 			if (isatty(STDIN_FILENO))
 				_puts("\n");
 			free(line);
-			exit(0);
+			exit(status);
 		}
 
 		if (line[nread - 1] == '\n')
@@ -55,8 +55,8 @@ int main(int ac, char **av)
 		parse_line(line, argv);
 
 		if (argv[0])
-			execute_command(argv, av[0], count);
+			status = execute_command(argv, av[0], count);
 	}
 	free(line);
-	return (0);
+	return (status);
 }

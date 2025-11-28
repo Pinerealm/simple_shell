@@ -32,6 +32,6 @@ char *_getenv(const char *name);
 char *get_path(char *cmd);
 
 /* execute.c */
-void execute_command(char **argv, char *name, int count);
+int execute_command(char **argv, char *name, int count);
 
 #endif /* SHELL_H */

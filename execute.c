@@ -5,8 +5,10 @@
  * @argv: argument vector
  * @name: program name for errors
  * @count: line counter
+ *
+ * Return: exit status
  */
-void execute_command(char **argv, char *name, int count)
+int execute_command(char **argv, char *name, int count)
 {
 	pid_t child_pid;
 	int status;
@@ -16,7 +18,7 @@ void execute_command(char **argv, char *name, int count)
 	if (command_path == NULL)
 	{
 		print_error(name, argv[0], count);
-		return;
+		return (127);
 	}
 
 	child_pid = fork();
@@ -24,7 +26,7 @@ void execute_command(char **argv, char *name, int count)
 	{
 		perror("Error:");
 		free(command_path);
-		return;
+		return (1);
 	}
 	if (child_pid == 0)
 	{
@@ -38,5 +40,8 @@ void execute_command(char **argv, char *name, int count)
 	{
 		wait(&status);
 		free(command_path);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
 	}
+	return (0);
 }

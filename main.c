@@ -33,6 +33,9 @@ int handle_builtins(char **argv, int *status, char *name, int count)
 	if (_strcmp(argv[0], "exit") == 0)
 		return (handle_exit(argv, status, name, count));
 
+	if (_strcmp(argv[0], "cd") == 0)
+		return (handle_cd(argv, status, name, count));
+
 	if (handle_env_commands(argv, status))
 		return (1);
 

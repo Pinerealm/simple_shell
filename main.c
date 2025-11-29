@@ -43,10 +43,11 @@ int handle_builtins(char **argv, int *status, char *name, int count)
  * main - simple shell main loop
  * @ac: argument count
  * @av: argument vector
+ * @env: environment vector
  *
  * Return: 0 on success
  */
-int main(int ac, char **av)
+int main(int ac, char **av, char **env)
 {
 	char *line = NULL, *argv[1024];
 	size_t len = 0;
@@ -55,6 +56,7 @@ int main(int ac, char **av)
 
 	(void)ac;
 
+	init_env(env);
 	while (1)
 	{
 		count++;
@@ -67,12 +69,12 @@ int main(int ac, char **av)
 			if (isatty(STDIN_FILENO))
 				_puts("\n");
 			free(line);
+			free_env();
 			exit(status);
 		}
 
 		if (line[nread - 1] == '\n')
 			line[nread - 1] = '\0';
-
 		parse_line(line, argv);
 
 		if (argv[0])
@@ -85,5 +87,6 @@ int main(int ac, char **av)
 		}
 	}
 	free(line);
+	free_env();
 	return (status);
 }

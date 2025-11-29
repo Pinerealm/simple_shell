@@ -45,6 +45,8 @@ void print_env(void);
 /* env_builtins.c */
 int _setenv(char *name, char *value);
 int _unsetenv(char *name);
+void init_env(char **env);
+void free_env(void);
 
 /* builtin_handlers.c */
 int handle_exit(char **argv, int *status, char *name, int count);

@@ -42,6 +42,14 @@ char *get_path(char *cmd);
 /* builtins.c */
 void print_env(void);
 
+/* env_builtins.c */
+int _setenv(char *name, char *value);
+int _unsetenv(char *name);
+
+/* builtin_handlers.c */
+int handle_exit(char **argv, int *status, char *name, int count);
+int handle_env_commands(char **argv, int *status);
+
 /* getline.c */
 ssize_t _getline(char **lineptr, size_t *n, int fd);
 

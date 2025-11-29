@@ -30,29 +30,12 @@ void parse_line(char *line, char **argv)
  */
 int handle_builtins(char **argv, int *status, char *name, int count)
 {
-	int exit_val;
-
 	if (_strcmp(argv[0], "exit") == 0)
-	{
-		if (argv[1])
-		{
-			exit_val = _atoi(argv[1]);
-			if (exit_val == -1)
-			{
-				*status = 2;
-				print_exit_error(name, count, argv[1]);
-				return (1);
-			}
-			*status = exit_val;
-		}
-		return (-1);
-	}
-	if (_strcmp(argv[0], "env") == 0)
-	{
-		print_env();
-		*status = 0;
+		return (handle_exit(argv, status, name, count));
+
+	if (handle_env_commands(argv, status))
 		return (1);
-	}
+
 	return (0);
 }
 

@@ -43,6 +43,46 @@ int handle_builtins(char **argv, int *status, char *name, int count)
 }
 
 /**
+ * process_input - processes the input line
+ * @line: input line
+ * @status: pointer to status variable
+ * @name: program name
+ * @count: line count
+ *
+ * Return: -1 to exit, 0 otherwise
+ */
+int process_input(char *line, int *status, char *name, int count)
+{
+	char *argv[1024];
+	char *commands[1024];
+	char *cmd;
+	int i = 0, j, builtin_ret = 0;
+
+	cmd = _strtok(line, ";");
+	while (cmd)
+	{
+		commands[i++] = cmd;
+		cmd = _strtok(NULL, ";");
+	}
+	commands[i] = NULL;
+
+	for (j = 0; j < i; j++)
+	{
+		parse_line(commands[j], argv);
+
+		if (argv[0])
+		{
+			builtin_ret = handle_builtins(argv, status, name, count);
+			if (builtin_ret == -1)
+				return (-1);
+			else if (builtin_ret == 0)
+				*status = execute_command(argv, name, count);
+		}
+	}
+	return (0);
+}
+
+/**
  * main - simple shell main loop
  * @ac: argument count
  * @av: argument vector
@@ -52,10 +92,10 @@ int handle_builtins(char **argv, int *status, char *name, int count)
  */
 int main(int ac, char **av, char **env)
 {
-	char *line = NULL, *argv[1024];
+	char *line = NULL;
 	size_t len = 0;
 	ssize_t nread;
-	int count = 0, status = 0, builtin_ret;
+	int count = 0, status = 0;
 
 	(void)ac;
 
@@ -78,16 +118,9 @@ int main(int ac, char **av, char **env)
 
 		if (line[nread - 1] == '\n')
 			line[nread - 1] = '\0';
-		parse_line(line, argv);
 
-		if (argv[0])
-		{
-			builtin_ret = handle_builtins(argv, &status, av[0], count);
-			if (builtin_ret == -1)
-				break;
-			else if (builtin_ret == 0)
-				status = execute_command(argv, av[0], count);
-		}
+		if (process_input(line, &status, av[0], count) == -1)
+			break;
 	}
 	free(line);
 	free_env();

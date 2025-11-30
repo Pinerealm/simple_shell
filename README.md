@@ -7,7 +7,13 @@ A simple UNIX command interpreter written in C as part of the ALX Software Engin
 - **Command Execution**: Executes commands found in the system's `PATH` or via absolute/relative paths.
 - **Argument Handling**: Supports commands with arguments (e.g., `ls -l /tmp`).
 - **Environment**: Inherits the environment from the parent process.
-- **Built-in Commands**: Supports `exit` (to exit the shell) and `env` (to print environment variables).
+- **Built-in Commands**:
+  - `exit`: Exits the shell.
+  - `env`: Prints the current environment variables.
+  - `setenv`: Initializes a new environment variable or modifies an existing one.
+  - `unsetenv`: Removes an environment variable.
+  - `cd`: Changes the current directory. Supports `cd [dir]`, `cd` (home), and `cd -` (previous directory).
+- **Command Separator**: Supports separating multiple commands with `;`.
 - **Custom Implementation**: Uses custom implementations of `getline` and `strtok` to minimize standard library dependencies.
 - **Error Handling**: Displays error messages matching the `sh` format.
 - **Interactive & Non-Interactive Modes**: Works in a terminal or via pipes/scripts.
@@ -45,6 +51,17 @@ total 40
 ...
 ($) pwd
 /home/user/simple_shell
+($) cd ..
+($) pwd
+/home/user
+($) setenv MYVAR hello
+($) env
+...
+...
+MYVAR=hello
+($) ls; pwd
+AUTHORS  execute.c  main.c  shell  shell.h
+/home/user/simple_shell
 ($) exit
 ```
 
@@ -60,7 +77,9 @@ echo "ls -l" | ./shell
 
 - **`main.c`**: Entry point. Handles the main loop, reading input, and parsing lines.
 - **`execute.c`**: Handles process creation (`fork`) and execution (`execve`).
-- **`builtins.c`**: Implementation of built-in commands (`exit`, `env`).
+- **`builtins.c`**: Implementation of built-in commands (`env`, `setenv`, `unsetenv` logic).
+- **`builtin_handlers.c`**: Handlers for built-in commands (`exit`, `cd`, `env` dispatch).
+- **`env_builtins.c`**: Environment variable management (`_setenv`, `_unsetenv`, `init_env`).
 - **`path.c`**: Handles `PATH` environment variable searching and command resolution.
 - **`getline.c`**: Custom implementation of the `getline` function using a static buffer.
 - **`tokenizer.c`**: Custom implementation of `strtok` for splitting strings.

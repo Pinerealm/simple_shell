@@ -13,6 +13,11 @@
 
 #define READ_BUF_SIZE 1024
 
+#define OP_NONE 0
+#define OP_SEMICOLON 1
+#define OP_AND 2
+#define OP_OR 3
+
 extern char **environ;
 
 /* utils.c */
@@ -34,6 +39,7 @@ int _atoi(char *s);
 
 /* tokenizer.c */
 char *_strtok(char *str, char *delim);
+int split_commands(char *line, char **commands, int *operators);
 
 /* path.c */
 char *_getenv(const char *name);

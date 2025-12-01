@@ -57,3 +57,53 @@ char *_strtok(char *str, char *delim)
 
 	return (token);
 }
+
+/**
+ * split_commands - splits line into commands based on separators
+ * @line: input line
+ * @commands: array to store commands
+ * @operators: array to store operators
+ *
+ * Return: number of commands
+ */
+int split_commands(char *line, char **commands, int *operators)
+{
+	char *cursor = line;
+	int i = 0, op;
+
+	if (!line)
+		return (0);
+
+	commands[i] = cursor;
+	while (*cursor)
+	{
+		if (*cursor == ';')
+		{
+			op = OP_SEMICOLON;
+			*cursor = '\0';
+			operators[i++] = op;
+			cursor++;
+			commands[i] = cursor;
+		}
+		else if (*cursor == '&' && *(cursor + 1) == '&')
+		{
+			op = OP_AND;
+			*cursor = '\0';
+			operators[i++] = op;
+			cursor += 2;
+			commands[i] = cursor;
+		}
+		else if (*cursor == '|' && *(cursor + 1) == '|')
+		{
+			op = OP_OR;
+			*cursor = '\0';
+			operators[i++] = op;
+			cursor += 2;
+			commands[i] = cursor;
+		}
+		else
+			cursor++;
+	}
+	operators[i] = OP_NONE;
+	return (i + 1);
+}

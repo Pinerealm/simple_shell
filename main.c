@@ -1,16 +1,16 @@
 #include "shell.h"
 
 /**
- * parse_line - parses a line into arguments
- * @line: string to parse
+ * parse_command - parses a command into arguments
+ * @command: string to parse
  * @argv: array to store arguments
  */
-void parse_line(char *line, char **argv)
+void parse_command(char *command, char **argv)
 {
 	char *token;
 	int i = 0;
 
-	token = _strtok(line, " \t\n");
+	token = _strtok(command, " \t\n");
 	while (token && i < 1023)
 	{
 		argv[i++] = token;
@@ -53,31 +53,33 @@ int handle_builtins(char **argv, int *status, char *name, int count)
  */
 int process_input(char *line, int *status, char *name, int count)
 {
-	char *argv[1024];
-	char *commands[1024];
-	char *cmd;
-	int i = 0, j, builtin_ret = 0;
+	char *argv[1024], *commands[1024];
+	int operators[1024];
+	int i, num_commands, builtin_ret, execute_next = 1;
 
-	cmd = _strtok(line, ";");
-	while (cmd)
+	num_commands = split_commands(line, commands, operators);
+
+	for (i = 0; i < num_commands; i++)
 	{
-		commands[i++] = cmd;
-		cmd = _strtok(NULL, ";");
-	}
-	commands[i] = NULL;
-
-	for (j = 0; j < i; j++)
-	{
-		parse_line(commands[j], argv);
-
-		if (argv[0])
+		if (execute_next)
 		{
-			builtin_ret = handle_builtins(argv, status, name, count);
-			if (builtin_ret == -1)
-				return (-1);
-			else if (builtin_ret == 0)
-				*status = execute_command(argv, name, count);
+			parse_command(commands[i], argv);
+			if (argv[0])
+			{
+				builtin_ret = handle_builtins(argv, status, name, count);
+				if (builtin_ret == -1)
+					return (-1);
+				else if (builtin_ret == 0)
+					*status = execute_command(argv, name, count);
+			}
 		}
+
+		if (operators[i] == OP_AND)
+			execute_next = (*status == 0) ? 1 : 0;
+		else if (operators[i] == OP_OR)
+			execute_next = (*status != 0) ? 1 : 0;
+		else if (operators[i] == OP_SEMICOLON)
+			execute_next = 1;
 	}
 	return (0);
 }

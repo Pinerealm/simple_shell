@@ -25,10 +25,12 @@ void parse_command(char *command, char **argv)
  * @status: pointer to status variable
  * @name: program name
  * @count: line count
+ * @aliases: pointer to aliases list
  *
  * Return: 1 if built-in executed, 0 otherwise
  */
-int handle_builtins(char **argv, int *status, char *name, int count)
+int handle_builtins(char **argv, int *status, char *name, int count,
+		alias_t **aliases)
 {
 	if (_strcmp(argv[0], "exit") == 0)
 		return (handle_exit(argv, status, name, count));
@@ -36,9 +38,50 @@ int handle_builtins(char **argv, int *status, char *name, int count)
 	if (_strcmp(argv[0], "cd") == 0)
 		return (handle_cd(argv, status, name, count));
 
+	if (_strcmp(argv[0], "alias") == 0)
+		return (handle_alias(argv, status, name, count, aliases));
+
 	if (handle_env_commands(argv, status))
 		return (1);
 
+	return (0);
+}
+
+/**
+ * process_single_command - processes a single command
+ * @command: command string
+ * @status: pointer to status variable
+ * @name: program name
+ * @count: line count
+ * @aliases: pointer to aliases list
+ *
+ * Return: -1 to exit, 0 otherwise
+ */
+int process_single_command(char *command, int *status, char *name, int count,
+		alias_t **aliases)
+{
+	char *argv[1024];
+	int builtin_ret;
+	char *alias_copy = NULL;
+
+	parse_command(command, argv);
+	if (argv[0])
+	{
+		alias_copy = check_alias(argv, *aliases);
+
+		builtin_ret = handle_builtins(argv, status, name, count, aliases);
+		if (builtin_ret == -1)
+		{
+			if (alias_copy)
+				free(alias_copy);
+			return (-1);
+		}
+		else if (builtin_ret == 0)
+			*status = execute_command(argv, name, count);
+
+		if (alias_copy)
+			free(alias_copy);
+	}
 	return (0);
 }
 
@@ -48,14 +91,16 @@ int handle_builtins(char **argv, int *status, char *name, int count)
  * @status: pointer to status variable
  * @name: program name
  * @count: line count
+ * @aliases: pointer to aliases list
  *
  * Return: -1 to exit, 0 otherwise
  */
-int process_input(char *line, int *status, char *name, int count)
+int process_input(char *line, int *status, char *name, int count,
+		alias_t **aliases)
 {
-	char *argv[1024], *commands[1024];
+	char *commands[1024];
 	int operators[1024];
-	int i, num_commands, builtin_ret, execute_next = 1;
+	int i, num_commands, execute_next = 1;
 
 	num_commands = split_commands(line, commands, operators);
 
@@ -63,15 +108,8 @@ int process_input(char *line, int *status, char *name, int count)
 	{
 		if (execute_next)
 		{
-			parse_command(commands[i], argv);
-			if (argv[0])
-			{
-				builtin_ret = handle_builtins(argv, status, name, count);
-				if (builtin_ret == -1)
-					return (-1);
-				else if (builtin_ret == 0)
-					*status = execute_command(argv, name, count);
-			}
+			if (process_single_command(commands[i], status, name, count, aliases) == -1)
+				return (-1);
 		}
 
 		if (operators[i] == OP_AND)
@@ -98,6 +136,7 @@ int main(int ac, char **av, char **env)
 	size_t len = 0;
 	ssize_t nread;
 	int count = 0, status = 0;
+	alias_t *aliases = NULL;
 
 	(void)ac;
 
@@ -115,16 +154,18 @@ int main(int ac, char **av, char **env)
 				_puts("\n");
 			free(line);
 			free_env();
+			free_aliases(aliases);
 			exit(status);
 		}
 
 		if (line[nread - 1] == '\n')
 			line[nread - 1] = '\0';
 
-		if (process_input(line, &status, av[0], count) == -1)
+		if (process_input(line, &status, av[0], count, &aliases) == -1)
 			break;
 	}
 	free(line);
 	free_env();
+	free_aliases(aliases);
 	return (status);
 }

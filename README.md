@@ -13,7 +13,8 @@ A simple UNIX command interpreter written in C as part of the ALX Software Engin
   - `setenv`: Initializes a new environment variable or modifies an existing one.
   - `unsetenv`: Removes an environment variable.
   - `cd`: Changes the current directory. Supports `cd [dir]`, `cd` (home), and `cd -` (previous directory).
-- **Command Separator**: Supports separating multiple commands with `;`.
+  - `alias`: Manages aliases. Supports `alias` (list), `alias name` (print value), and `alias name='value'` (define).
+- **Command Separators**: Supports separating multiple commands with `;`, `&&`, and `||`.
 - **Custom Implementation**: Uses custom implementations of `getline` and `strtok` to minimize standard library dependencies.
 - **Error Handling**: Displays error messages matching the `sh` format.
 - **Interactive & Non-Interactive Modes**: Works in a terminal or via pipes/scripts.
@@ -79,6 +80,9 @@ echo "ls -l" | ./shell
 - **`execute.c`**: Handles process creation (`fork`) and execution (`execve`).
 - **`builtins.c`**: Implementation of built-in commands (`env`, `setenv`, `unsetenv` logic).
 - **`builtin_handlers.c`**: Handlers for built-in commands (`exit`, `cd`, `env` dispatch).
+- **`alias_builtins.c`**: Handler for the `alias` built-in command.
+- **`alias_expansion.c`**: Logic for expanding aliases in commands.
+- **`alias_utils.c`**: Helper functions for alias management (storage, retrieval, printing).
 - **`env_builtins.c`**: Environment variable management (`_setenv`, `_unsetenv`, `init_env`).
 - **`path.c`**: Handles `PATH` environment variable searching and command resolution.
 - **`getline.c`**: Custom implementation of the `getline` function using a static buffer.

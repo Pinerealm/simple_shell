@@ -13,7 +13,11 @@ A simple UNIX command interpreter written in C as part of the ALX Software Engin
   - `setenv`: Initializes a new environment variable or modifies an existing one.
   - `unsetenv`: Removes an environment variable.
   - `cd`: Changes the current directory. Supports `cd [dir]`, `cd` (home), and `cd -` (previous directory).
-  - `alias`: Manages aliases. Supports `alias` (list), `alias name` (print value), and `alias name='value'` (define).
+  - `alias`: Manages aliases. Supports `alias` (list), `alias name` (print value), and `alias name='value'` (define). Supports recursive alias expansion.
+- **Variable Replacement**:
+  - `$?`: Expands to the exit status of the most recently executed command.
+  - `$$`: Expands to the process ID of the shell.
+  - `$VAR`: Expands to the value of the environment variable `VAR`.
 - **Command Separators**: Supports separating multiple commands with `;`, `&&`, and `||`.
 - **Custom Implementation**: Uses custom implementations of `getline` and `strtok` to minimize standard library dependencies.
 - **Error Handling**: Displays error messages matching the `sh` format.
@@ -63,6 +67,12 @@ MYVAR=hello
 ($) ls; pwd
 AUTHORS  execute.c  main.c  shell  shell.h
 /home/user/simple_shell
+($) echo $$
+12345
+($) echo $?
+0
+($) echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ($) exit
 ```
 
@@ -83,6 +93,7 @@ echo "ls -l" | ./shell
 - **`alias_builtins.c`**: Handler for the `alias` built-in command.
 - **`alias_expansion.c`**: Logic for expanding aliases in commands.
 - **`alias_utils.c`**: Helper functions for alias management (storage, retrieval, printing).
+- **`variable_expansion.c`**: Logic for variable replacement (`$?`, `$$`, `$VAR`).
 - **`env_builtins.c`**: Environment variable management (`_setenv`, `_unsetenv`, `init_env`).
 - **`path.c`**: Handles `PATH` environment variable searching and command resolution.
 - **`getline.c`**: Custom implementation of the `getline` function using a static buffer.

@@ -61,11 +61,13 @@ int process_single_command(char *command, int *status, char *name, int count,
 		alias_t **aliases)
 {
 	char *argv[1024], *alias_copies[20], *new_alias;
-	int builtin_ret, alias_count = 0, i;
+	char *var_copies[1024];
+	int builtin_ret, alias_count = 0, i, var_count = 0;
 
 	parse_command(command, argv);
 	if (argv[0])
 	{
+		replace_variables(argv, *status, var_copies, &var_count);
 		while (alias_count < 20)
 		{
 			new_alias = check_alias(argv, *aliases);
@@ -79,6 +81,8 @@ int process_single_command(char *command, int *status, char *name, int count,
 		{
 			for (i = 0; i < alias_count; i++)
 				free(alias_copies[i]);
+			for (i = 0; i < var_count; i++)
+				free(var_copies[i]);
 			return (-1);
 		}
 		else if (builtin_ret == 0)
@@ -86,6 +90,8 @@ int process_single_command(char *command, int *status, char *name, int count,
 
 		for (i = 0; i < alias_count; i++)
 			free(alias_copies[i]);
+		for (i = 0; i < var_count; i++)
+			free(var_copies[i]);
 	}
 	return (0);
 }

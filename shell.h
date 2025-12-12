@@ -94,6 +94,10 @@ void free_env(void);
 int handle_exit(char **argv, int *status, char *name, int count);
 int handle_env_commands(char **argv, int *status);
 
+/* variable_expansion.c */
+void replace_variables(char **argv, int status, char **var_copies,
+		int *var_count);
+
 /* getline.c */
 ssize_t _getline(char **lineptr, size_t *n, int fd);
 

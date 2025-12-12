@@ -60,27 +60,32 @@ int handle_builtins(char **argv, int *status, char *name, int count,
 int process_single_command(char *command, int *status, char *name, int count,
 		alias_t **aliases)
 {
-	char *argv[1024];
-	int builtin_ret;
-	char *alias_copy = NULL;
+	char *argv[1024], *alias_copies[20], *new_alias;
+	int builtin_ret, alias_count = 0, i;
 
 	parse_command(command, argv);
 	if (argv[0])
 	{
-		alias_copy = check_alias(argv, *aliases);
+		while (alias_count < 20)
+		{
+			new_alias = check_alias(argv, *aliases);
+			if (!new_alias)
+				break;
+			alias_copies[alias_count++] = new_alias;
+		}
 
 		builtin_ret = handle_builtins(argv, status, name, count, aliases);
 		if (builtin_ret == -1)
 		{
-			if (alias_copy)
-				free(alias_copy);
+			for (i = 0; i < alias_count; i++)
+				free(alias_copies[i]);
 			return (-1);
 		}
 		else if (builtin_ret == 0)
 			*status = execute_command(argv, name, count);
 
-		if (alias_copy)
-			free(alias_copy);
+		for (i = 0; i < alias_count; i++)
+			free(alias_copies[i]);
 	}
 	return (0);
 }

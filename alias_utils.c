@@ -69,8 +69,19 @@ int set_alias(char *name, char *value, alias_t **aliases)
 
 	new_node->name = _strdup(name);
 	new_node->value = _strdup(value);
-	new_node->next = *aliases;
-	*aliases = new_node;
+	new_node->next = NULL;
+
+	if (*aliases == NULL)
+	{
+		*aliases = new_node;
+	}
+	else
+	{
+		node = *aliases;
+		while (node->next)
+			node = node->next;
+		node->next = new_node;
+	}
 	return (0);
 }
 

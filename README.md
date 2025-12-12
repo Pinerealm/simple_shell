@@ -18,6 +18,7 @@ A simple UNIX command interpreter written in C as part of the ALX Software Engin
   - `$?`: Expands to the exit status of the most recently executed command.
   - `$$`: Expands to the process ID of the shell.
   - `$VAR`: Expands to the value of the environment variable `VAR`.
+- **Comments**: Supports comments using `#`. Text after `#` is ignored.
 - **Command Separators**: Supports separating multiple commands with `;`, `&&`, and `||`.
 - **Custom Implementation**: Uses custom implementations of `getline` and `strtok` to minimize standard library dependencies.
 - **Error Handling**: Displays error messages matching the `sh` format.

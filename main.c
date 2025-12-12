@@ -172,6 +172,8 @@ int main(int ac, char **av, char **env)
 		if (line[nread - 1] == '\n')
 			line[nread - 1] = '\0';
 
+		remove_comments(line);
+
 		if (process_input(line, &status, av[0], count, &aliases) == -1)
 			break;
 	}

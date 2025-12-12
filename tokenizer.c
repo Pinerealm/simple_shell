@@ -107,3 +107,24 @@ int split_commands(char *line, char **commands, int *operators)
 	operators[i] = OP_NONE;
 	return (i + 1);
 }
+
+/**
+ * remove_comments - replaces first instance of '#' with '\0'
+ * @buf: string to modify
+ *
+ * Return: void
+ */
+void remove_comments(char *buf)
+{
+	int i;
+
+	for (i = 0; buf[i]; i++)
+	{
+		if (buf[i] == '#' && (!i || buf[i - 1] == ' ' ||
+			buf[i - 1] == '\t' || buf[i - 1] == ';'))
+		{
+			buf[i] = '\0';
+			break;
+		}
+	}
+}

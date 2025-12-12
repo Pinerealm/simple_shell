@@ -53,6 +53,7 @@ int _atoi(char *s);
 /* tokenizer.c */
 char *_strtok(char *str, char *delim);
 int split_commands(char *line, char **commands, int *operators);
+void remove_comments(char *buf);
 
 /* path.c */
 char *_getenv(const char *name);

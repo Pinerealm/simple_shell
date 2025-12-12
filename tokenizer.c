@@ -128,3 +128,22 @@ void remove_comments(char *buf)
 		}
 	}
 }
+
+/**
+ * parse_command - parses a command into arguments
+ * @command: string to parse
+ * @argv: array to store arguments
+ */
+void parse_command(char *command, char **argv)
+{
+	char *token;
+	int i = 0;
+
+	token = _strtok(command, " \t\n");
+	while (token && i < 1023)
+	{
+		argv[i++] = token;
+		token = _strtok(NULL, " \t\n");
+	}
+	argv[i] = NULL;
+}

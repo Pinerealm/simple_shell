@@ -40,6 +40,10 @@ void _eputs(char *str);
 void print_number(int n);
 void print_error(char *name, char *cmd, int count);
 
+/* utils_2.c */
+void print_exit_error(char *name, int count, char *arg);
+void print_cd_error(char *name, int count, char *arg);
+
 /* string_utils.c */
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
@@ -54,6 +58,7 @@ int _atoi(char *s);
 char *_strtok(char *str, char *delim);
 int split_commands(char *line, char **commands, int *operators);
 void remove_comments(char *buf);
+void parse_command(char *command, char **argv);
 
 /* path.c */
 char *_getenv(const char *name);
@@ -85,16 +90,6 @@ void free_aliases(alias_t *aliases);
 void print_all_aliases(alias_t *aliases);
 char *check_alias(char **argv, alias_t *aliases);
 
-/* env_builtins.c */
-int _setenv(char *name, char *value);
-int _unsetenv(char *name);
-void init_env(char **env);
-void free_env(void);
-
-/* builtin_handlers.c */
-int handle_exit(char **argv, int *status, char *name, int count);
-int handle_env_commands(char **argv, int *status);
-
 /* variable_expansion.c */
 void replace_variables(char **argv, int status, char **var_copies,
 		int *var_count);
@@ -104,17 +99,5 @@ ssize_t _getline(char **lineptr, size_t *n, int fd);
 
 /* execute.c */
 int execute_command(char **argv, char *name, int count);
-
-/* utils.c */
-int _strlen(char *s);
-void _puts(char *str);
-void _eputs(char *str);
-void print_number(int n);
-void print_error(char *name, char *cmd, int count);
-
-/* utils_2.c */
-void print_exit_error(char *name, int count, char *arg);
-void print_cd_error(char *name, int count, char *arg);
-
 
 #endif /* SHELL_H */

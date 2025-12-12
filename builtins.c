@@ -93,3 +93,31 @@ int handle_env_commands(char **argv, int *status)
 		return (handle_unsetenv(argv, status));
 	return (0);
 }
+
+/**
+ * handle_builtins - handles built-in commands
+ * @argv: argument vector
+ * @status: pointer to status variable
+ * @name: program name
+ * @count: line count
+ * @aliases: pointer to aliases list
+ *
+ * Return: 1 if built-in executed, 0 otherwise
+ */
+int handle_builtins(char **argv, int *status, char *name, int count,
+		alias_t **aliases)
+{
+	if (_strcmp(argv[0], "exit") == 0)
+		return (handle_exit(argv, status, name, count));
+
+	if (_strcmp(argv[0], "cd") == 0)
+		return (handle_cd(argv, status, name, count));
+
+	if (_strcmp(argv[0], "alias") == 0)
+		return (handle_alias(argv, status, name, count, aliases));
+
+	if (handle_env_commands(argv, status))
+		return (1);
+
+	return (0);
+}

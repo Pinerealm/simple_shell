@@ -1,50 +1,29 @@
 #include "shell.h"
 
 /**
- * parse_command - parses a command into arguments
- * @command: string to parse
- * @argv: array to store arguments
- */
-void parse_command(char *command, char **argv)
-{
-	char *token;
-	int i = 0;
-
-	token = _strtok(command, " \t\n");
-	while (token && i < 1023)
-	{
-		argv[i++] = token;
-		token = _strtok(NULL, " \t\n");
-	}
-	argv[i] = NULL;
-}
-
-/**
- * handle_builtins - handles built-in commands
- * @argv: argument vector
- * @status: pointer to status variable
- * @name: program name
- * @count: line count
- * @aliases: pointer to aliases list
+ * handle_file_input - handles file input mode
+ * @ac: argument count
+ * @av: argument vector
  *
- * Return: 1 if built-in executed, 0 otherwise
+ * Return: file descriptor or -1 on error
  */
-int handle_builtins(char **argv, int *status, char *name, int count,
-		alias_t **aliases)
+int handle_file_input(int ac, char **av)
 {
-	if (_strcmp(argv[0], "exit") == 0)
-		return (handle_exit(argv, status, name, count));
+	int fd = STDIN_FILENO;
 
-	if (_strcmp(argv[0], "cd") == 0)
-		return (handle_cd(argv, status, name, count));
-
-	if (_strcmp(argv[0], "alias") == 0)
-		return (handle_alias(argv, status, name, count, aliases));
-
-	if (handle_env_commands(argv, status))
-		return (1);
-
-	return (0);
+	if (ac == 2)
+	{
+		fd = open(av[1], O_RDONLY);
+		if (fd == -1)
+		{
+			_eputs(av[0]);
+			_eputs(": 0: Can't open ");
+			_eputs(av[1]);
+			_eputs("\n");
+			exit(127);
+		}
+	}
+	return (fd);
 }
 
 /**
@@ -134,6 +113,21 @@ int process_input(char *line, int *status, char *name, int count,
 }
 
 /**
+ * cleanup - frees memory and closes file descriptor
+ * @line: input line
+ * @aliases: aliases list
+ * @fd: file descriptor
+ */
+void cleanup(char *line, alias_t *aliases, int fd)
+{
+	free(line);
+	free_env();
+	free_aliases(aliases);
+	if (fd != STDIN_FILENO)
+		close(fd);
+}
+
+/**
  * main - simple shell main loop
  * @ac: argument count
  * @av: argument vector
@@ -146,26 +140,23 @@ int main(int ac, char **av, char **env)
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t nread;
-	int count = 0, status = 0;
+	int count = 0, status = 0, fd;
 	alias_t *aliases = NULL;
 
-	(void)ac;
-
+	fd = handle_file_input(ac, av);
 	init_env(env);
 	while (1)
 	{
 		count++;
-		if (isatty(STDIN_FILENO))
+		if (isatty(STDIN_FILENO) && ac == 1)
 			_puts("($) ");
 
-		nread = _getline(&line, &len, STDIN_FILENO);
+		nread = _getline(&line, &len, fd);
 		if (nread == -1)
 		{
-			if (isatty(STDIN_FILENO))
+			if (isatty(STDIN_FILENO) && ac == 1)
 				_puts("\n");
-			free(line);
-			free_env();
-			free_aliases(aliases);
+			cleanup(line, aliases, fd);
 			exit(status);
 		}
 
@@ -177,8 +168,6 @@ int main(int ac, char **av, char **env)
 		if (process_input(line, &status, av[0], count, &aliases) == -1)
 			break;
 	}
-	free(line);
-	free_env();
-	free_aliases(aliases);
+	cleanup(line, aliases, fd);
 	return (status);
 }
